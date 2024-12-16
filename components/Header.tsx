@@ -16,9 +16,9 @@ const Header = () => {
   const path = usePathname();
   const [registerEmail, setRegisterEmail] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
-  const [authState, setAuthState] = useState(
-    "verifyRegister"
-  );
+  const [authState, setAuthState] = useState<
+    "login" | "register" | "verifyRegister" | "forgotPassword" | "resetPassword"
+  >("verifyRegister");
 
   const navbarItems = [
     { id: 1, title: "Home", path: "/" },
