@@ -11,6 +11,7 @@ export interface Product {
   discount: number;
   liked: boolean;
   basket: boolean;
+  tags: string[];
   image_url: string[];
 }
 export type Size = "Small" | "Medium" | "Large";

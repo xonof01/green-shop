@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import { useRouter } from "next/navigation";
 import { Product } from "./type";
 
 interface Props {
@@ -8,9 +9,14 @@ interface Props {
 
 export const ProductCard = ({ product }: Props) => {
   const { product_id, product_name, image_url, discount, cost } = product;
+  const router = useRouter();
 
   return (
-    <div key={product_id} className="group relative">
+    <div
+      key={product_id}
+      className="group relative cursor-pointer"
+      onClick={() => router.push(`/product/${product_id}`)}
+    >
       <div className="aspect-square relative overflow-hidden rounded-lg bg-gray-100">
         <Image
           src={image_url[0]}
