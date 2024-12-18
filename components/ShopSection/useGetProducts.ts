@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Product } from "../ProductCard/type";
 import { instance } from "@/hooks/instance";
 
-export const useGetProducts = () => {
+export const useGetProducts = (page: number) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -13,7 +13,7 @@ export const useGetProducts = () => {
         const response = await instance().get<{ products: Product[] }>(
           "/products",
           {
-            params: { page: 1, limit: 9 },
+            params: { page, limit: 9 },
           }
         );
         setProducts(response.data.products);
@@ -25,7 +25,7 @@ export const useGetProducts = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [page]);
 
-  return { products, loading, error };
+  return { products, isProductLoading: loading, error };
 };

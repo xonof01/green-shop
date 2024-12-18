@@ -16,7 +16,6 @@ export default function RelatedProducts({ products }: Props) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const totalSlides = Math.ceil(products.length / PRODUCTS_PER_SLIDE);
   const slideRef = useRef<HTMLDivElement>(null);
-  console.log(products);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % totalSlides);
@@ -26,15 +25,13 @@ export default function RelatedProducts({ products }: Props) {
     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
-
   useEffect(() => {
     if (slideRef.current) {
-      slideRef.current.style.transform = `translateX(-${currentSlide * 100}%)`;
+      slideRef.current.style.transform = `translateX(-${
+        (currentSlide * 100) / 3
+      }%)`;
     }
-  }, [currentSlide]);
+  }, [currentSlide, products]);
 
   return (
     <div className="container py-12 mb-16">
@@ -62,7 +59,7 @@ export default function RelatedProducts({ products }: Props) {
                 .map((product) => (
                   <div key={product.product_id} className="w-1/5 px-2">
                     <Link
-                      href={`/product/${product.product_id}`}
+                      href={`/shop/${product.product_id}`}
                       className="group block"
                     >
                       <div className="relative aspect-square mb-2 bg-gray-100 rounded-lg overflow-hidden">
@@ -144,7 +141,7 @@ export default function RelatedProducts({ products }: Props) {
           {Array.from({ length: totalSlides }).map((_, index) => (
             <button
               key={index}
-              onClick={() => goToSlide(index)}
+              onClick={() => setCurrentSlide(index)}
               className={`w-3 h-3 rounded-full transition-colors ${
                 currentSlide === index ? "bg-green-600" : "bg-gray-200"
               }`}

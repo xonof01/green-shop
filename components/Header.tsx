@@ -98,7 +98,7 @@ const Header = () => {
 
   return (
     <header>
-      <div className="container1 flex items-center justify-between border-b-[1px] border-[#EEF7F0]">
+      <div className="container flex items-center justify-between border-b-[1px] border-[#EEF7F0]">
         <Link href="/">
           <Logo />
         </Link>

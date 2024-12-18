@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Product } from "./type";
+import HeroImg from "@/assets/images/HeroImg.jpg";
 
 interface Props {
   product: Product;
@@ -13,13 +14,13 @@ export const ProductCard = ({ product }: Props) => {
 
   return (
     <div
-      key={product_id}
       className="group relative cursor-pointer"
-      onClick={() => router.push(`/product/${product_id}`)}
+      onClick={() => router.push(`/shop/${product_id}`)}
     >
-      <div className="aspect-square relative overflow-hidden rounded-lg bg-gray-100">
+      <div className="h-0.5 w-full opacity-0 group-hover:opacity-100 group-hover:bg-green-600 transition-all duration-300" />
+      <div className="aspect-square relative overflow-hidden bg-gray-100">
         <Image
-          src={image_url[0]}
+          src={image_url?.[0] || HeroImg}
           alt={product_name}
           fill
           className="object-cover object-center"

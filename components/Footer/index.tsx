@@ -7,7 +7,6 @@ import { footerLinks, serviceText } from "./StaticData";
 export default function Footer() {
   return (
     <footer className="bg-white">
-      {/* Services Section */}
       <div className="container mx-auto px-4 py-4">
         <div className="flex gap-6">
           <div className="grid md:grid-cols-3 gap-8 mb-16 w-2/3">
@@ -22,7 +21,6 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Newsletter Section */}
           <div className="text-center mb-16 w-1/3">
             <h3 className="text-2xl font-bold mb-4">
               Would you like to join newsletters?
@@ -49,7 +47,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Contact Bar */}
         <div className="bg-green-50 p-6 border-t border-b border-green-100 grid grid-cols-1 md:grid-cols-4 gap-6 items-center mb-16">
           <Logo />
           <div className="flex items-center gap-2">
@@ -99,7 +96,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Footer Links */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
           <div>
             <h4 className="font-bold text-lg mb-4">My Account</h4>
@@ -207,7 +203,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Copyright */}
         <div className="text-center text-gray-600 border-t pt-3">
           <p>© 2024 GreenShop. All Rights Reserved.</p>
         </div>

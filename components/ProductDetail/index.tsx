@@ -4,23 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "../ProductCard/type";
-import RelatedProducts from "./RelatedProducts";
-
-const sizes = [
-  { value: "S", label: "S" },
-  { value: "M", label: "M" },
-  { value: "L", label: "L" },
-  { value: "XL", label: "XL" },
-];
 
 export default function ProductDetail({ product }: { product: Product }) {
   const [selectedImage, setSelectedImage] = useState(product.image_url[0]);
-  const [selectedSize, setSelectedSize] = useState("S");
+  const [selectedSize, setSelectedSize] = useState(product.size[0]);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
 
   const handleQuantityChange = (action: "increase" | "decrease") => {
-    if (action === "increase") {
+    if (action === "increase" && product.count > quantity) {
       setQuantity((prev) => prev + 1);
     } else if (action === "decrease" && quantity > 1) {
       setQuantity((prev) => prev - 1);
@@ -134,18 +126,18 @@ export default function ProductDetail({ product }: { product: Product }) {
           <div className="mb-6">
             <h2 className="font-semibold mb-2">Size:</h2>
             <div className="flex gap-2">
-              {sizes.map((size) => (
+              {product.size.map((size) => (
                 <button
-                  key={size.value}
-                  onClick={() => setSelectedSize(size.value)}
+                  key={size}
+                  onClick={() => setSelectedSize(size)}
                   className={`w-10 h-10 rounded-full border-2 flex items-center justify-center
                     ${
-                      selectedSize === size.value
+                      selectedSize === size
                         ? "border-green-600 bg-green-50 text-green-600"
                         : "border-gray-200"
                     }`}
                 >
-                  {size.label}
+                  {size.charAt(0)}
                 </button>
               ))}
             </div>
@@ -177,6 +169,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               <button
                 onClick={() => handleQuantityChange("increase")}
                 className="p-2 hover:bg-gray-100"
+                disabled={product.count < quantity}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

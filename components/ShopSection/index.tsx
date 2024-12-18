@@ -6,22 +6,48 @@ import { useGetProducts } from "./useGetProducts";
 import SuperSaleBanner from "@/assets/images/SuperSaleBanner.png";
 import Image from "next/image";
 import { Categories } from "./Categories";
+import { useGetCategories } from "./useGetCategories";
+import { Skeleton } from "../Skeleton";
 
 export default function ShopSection() {
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState<string>("all");
   const [priceRange, setPriceRange] = useState([39, 630]);
+  const [page, setPage] = useState<1 | 2>(1);
+  const [selectedCategory, setSelectedCategory] = useState<string>();
 
-  const { products, loading } = useGetProducts();
+  const { categories, isCategoryLoading } = useGetCategories();
+  const { products, isProductLoading } = useGetProducts(page);
+
+  const filteredProducts = () =>
+    selectedCategory
+      ? products.filter((item) => item.category_id === selectedCategory)
+      : products;
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Sidebar */}
         <div className="w-full lg:w-64 flex-shrink-0">
           <div className="space-y-8">
-            <Categories />
+            {isCategoryLoading ? (
+              <div className="space-y-3">
+                <Skeleton className="h-6 w-64" />
+                <Skeleton className="h-6 w-64" />
+                <Skeleton className="h-6 w-64" />
+                <Skeleton className="h-6 w-64" />
+                <Skeleton className="h-6 w-64" />
+                <Skeleton className="h-6 w-64" />
+                <Skeleton className="h-6 w-64" />
+                <Skeleton className="h-6 w-64" />
+                <Skeleton className="h-6 w-64" />
+              </div>
+            ) : (
+              <Categories
+                categories={categories}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+              />
+            )}
 
-            {/* Price Range */}
             <div>
               <h2 className="text-xl font-semibold mb-4 text-gray-800">
                 Price Range
@@ -72,7 +98,6 @@ export default function ShopSection() {
               </div>
             </div>
 
-            {/* Size Filter */}
             <div>
               <h2 className="text-xl font-semibold mb-4">Size</h2>
               <ul className="space-y-2">
@@ -159,27 +184,35 @@ export default function ShopSection() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {loading ? (
-              <div>Loading...</div>
+            {isProductLoading ? (
+              <>
+                <Skeleton className="w-auto h-80" />
+                <Skeleton className="w-auto h-80" />
+                <Skeleton className="w-auto h-80" />
+                <Skeleton className="w-auto h-80" />
+                <Skeleton className="w-auto h-80" />
+                <Skeleton className="w-auto h-80" />
+              </>
             ) : (
-              products.map((product) => (
+              filteredProducts().map((product) => (
                 <ProductCard product={product} key={product.product_id} />
               ))
             )}
           </div>
 
           <div className="flex justify-end gap-2 mt-16">
-            <button className="w-8 h-8 flex items-center justify-center rounded bg-green-600 text-white">
+            <button
+              className="w-8 h-8 flex items-center justify-center rounded bg-green-600 text-white"
+              onClick={() => setPage(1)}
+            >
               1
             </button>
-            {[2, 3, 4].map((page) => (
-              <button
-                key={page}
-                className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-100"
-              >
-                {page}
-              </button>
-            ))}
+            <button
+              className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-100"
+              onClick={() => setPage(2)}
+            >
+              2
+            </button>
             <button className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-100">
               <svg
                 className="w-4 h-4"

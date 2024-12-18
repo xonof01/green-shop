@@ -73,7 +73,7 @@ export default function BlogSection() {
               key={post.id}
               className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
             >
-              <Link href={`/blog/${post.slug}`}>
+              <Link href="#">
                 <div className="relative h-48">
                   <Image
                     src={post.image}
