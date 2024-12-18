@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { instance } from "@/hooks/instance";
+import { useQuery } from "@tanstack/react-query";
 
 export interface Category {
   category_id: string;
@@ -7,29 +7,19 @@ export interface Category {
 }
 
 export const useGetCategories = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: categories,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () =>
+      instance
+        .get<{ categories: Category[] }>("/categories", {
+          params: { page: 1, limit: 9 },
+        })
+        .then((res) => res.data.categories),
+  });
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await instance().get<{ categories: Category[] }>(
-          "/categories",
-          {
-            params: { page: 1, limit: 9 },
-          }
-        );
-        setCategories(response.data.categories);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  return { categories, isCategoryLoading: loading, error };
+  return { categories, isCategoryLoading: isLoading, isError };
 };

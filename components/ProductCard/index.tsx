@@ -3,6 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Product } from "./type";
 import HeroImg from "@/assets/images/HeroImg.jpg";
+import { useLikeProduct } from "@/hooks/useLikeProduct";
 
 interface Props {
   product: Product;
@@ -11,12 +12,10 @@ interface Props {
 export const ProductCard = ({ product }: Props) => {
   const { product_id, product_name, image_url, discount, cost } = product;
   const router = useRouter();
+  const { mutate } = useLikeProduct();
 
   return (
-    <div
-      className="group relative cursor-pointer"
-      onClick={() => router.push(`/shop/${product_id}`)}
-    >
+    <div className="group relative cursor-pointer">
       <div className="h-0.5 w-full opacity-0 group-hover:opacity-100 group-hover:bg-green-600 transition-all duration-300" />
       <div className="aspect-square relative overflow-hidden bg-gray-100">
         <Image
@@ -24,12 +23,8 @@ export const ProductCard = ({ product }: Props) => {
           alt={product_name}
           fill
           className="object-cover object-center"
+          onClick={() => router.push(`/shop/${product_id}`)}
         />
-        {discount && (
-          <span className="absolute top-4 right-4 bg-green-600 text-white px-2 py-1 rounded text-sm">
-            {discount}% OFF
-          </span>
-        )}
         <div className="absolute bottom-[-50%] left-1/2 transform -translate-x-1/2 flex gap-3 opacity-0 group-hover:opacity-100 group-hover:bottom-4 transition-all duration-300">
           <button className="p-3 bg-white rounded-full shadow-md hover:bg-green-600 hover:text-white transition-colors">
             <svg
@@ -46,7 +41,12 @@ export const ProductCard = ({ product }: Props) => {
               />
             </svg>
           </button>
-          <button className="p-3 bg-white rounded-full shadow-md hover:bg-green-600 hover:text-white transition-colors">
+          <button
+            onClick={() => mutate({ productId: product.product_id })}
+            className={`p-3 rounded-full shadow-md hover:bg-green-600 hover:text-white transition-colors ${
+              product.basket ? "bg-green-600" : "bg-white"
+            }`}
+          >
             <svg
               className="w-5 h-5"
               fill="none"
@@ -82,7 +82,8 @@ export const ProductCard = ({ product }: Props) => {
       <div className="mt-4 space-y-2">
         <h3 className="text-lg font-medium text-gray-900">{product_name}</h3>
         <div className="flex items-center gap-2">
-          <span className="text-green-600 font-medium">${cost.toFixed(2)}</span>
+          {discount && <del className="text-gray-400">${discount}</del>}
+          <strong className="text-green-600">${cost.toFixed(2)}</strong>
         </div>
       </div>
     </div>

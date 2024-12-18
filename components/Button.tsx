@@ -4,7 +4,7 @@ import React, { ReactNode } from "react";
 interface ButtonType {
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  title: string;
+  title: ReactNode;
   extraTitleStyle?: string;
   extraStyle?: string;
   onClick?: () => void;
@@ -26,7 +26,7 @@ const Button: React.FC<ButtonType> = ({
       className={`bg-[#46A358] rounded-[6px] text-white flex items-center justify-center gap-[5px] ${extraStyle}`}
     >
       {leftIcon && leftIcon}
-      <span className={`extraTitleStyle`}>{title}</span>
+      <span className={extraTitleStyle}>{title}</span>
       {rightIcon && rightIcon}
     </button>
   );

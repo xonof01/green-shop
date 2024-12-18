@@ -1,7 +1,8 @@
 import { Product } from "@/components/ProductCard/type";
 import ProductDetail from "@/components/ProductDetail";
 import RelatedProducts from "@/components/ProductDetail/RelatedProducts";
-import { instance } from "@/hooks/instance";
+import { API } from "@/hooks/getEnv";
+import axios from "axios";
 
 export default async function ProductDetailPage({
   params,
@@ -9,9 +10,9 @@ export default async function ProductDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { data } = await instance().get<Product>(`/product/${id}`);
-  const response = await instance()
-    .get<{ products: Product[] }>("/products", {
+  const { data } = await axios.get<Product>(`${API}/product/${id}`);
+  const response = await axios
+    .get<{ products: Product[] }>(`${API}/products`, {
       params: { page: 1, limit: 15 },
     })
     .then((res) => res.data);

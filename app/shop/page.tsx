@@ -1,5 +1,14 @@
-import { redirect } from "next/navigation";
+import axios from "axios";
+import RelatedProducts from "@/components/ProductDetail/RelatedProducts";
+import { Product } from "@/components/ProductCard/type";
+import { API } from "@/hooks/getEnv";
 
-export default function ShopPage() {
-  return redirect("/shop/99316bc6-c2ec-4544-9da5-c3a267a51508");
+export default async function ShopPage() {
+  const { products } = await axios
+    .get<{ products: Product[] }>(`${API}/products`, {
+      params: { page: 1, limit: 15 },
+    })
+    .then((res) => res.data);
+
+  return <RelatedProducts products={products} isShowTitle={false} />;
 }

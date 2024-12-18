@@ -1,31 +1,29 @@
-import { useEffect, useState } from "react";
 import { Product } from "../ProductCard/type";
 import { instance } from "@/hooks/instance";
+import { useQuery } from "@tanstack/react-query";
 
-export const useGetProducts = (page: number) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+export interface ProductParams {
+  page: number;
+  limit: number;
+  category?: string;
+  size?: string;
+  tag?: string | null;
+  min_price?: number;
+  max_price?: number;
+}
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await instance().get<{ products: Product[] }>(
-          "/products",
-          {
-            params: { page, limit: 9 },
-          }
-        );
-        setProducts(response.data.products);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
+export const useGetProducts = (params: ProductParams) => {
+  const {
+    data: products,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["products", params],
+    queryFn: () =>
+      instance
+        .get<{ products: Product[] }>("/products", { params })
+        .then((res) => res.data.products),
+  });
 
-    fetchProducts();
-  }, [page]);
-
-  return { products, isProductLoading: loading, error };
+  return { products, isProductLoading: isLoading, isError };
 };

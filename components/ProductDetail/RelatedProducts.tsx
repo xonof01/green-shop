@@ -8,11 +8,15 @@ import HeroImg from "@/assets/images/HeroImg.jpg";
 
 interface Props {
   products: Product[];
+  isShowTitle?: boolean;
 }
 
 const PRODUCTS_PER_SLIDE = 5;
 
-export default function RelatedProducts({ products }: Props) {
+export default function RelatedProducts({
+  products,
+  isShowTitle = true,
+}: Props) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const totalSlides = Math.ceil(products.length / PRODUCTS_PER_SLIDE);
   const slideRef = useRef<HTMLDivElement>(null);
@@ -35,9 +39,11 @@ export default function RelatedProducts({ products }: Props) {
 
   return (
     <div className="container py-12 mb-16">
-      <h2 className="text-2xl font-semibold mb-8 text-green-600 pb-5 border-b border-b-green-400">
-        Related Products
-      </h2>
+      {isShowTitle ? (
+        <h2 className="text-2xl font-semibold mb-8 text-green-600 pb-5 border-b border-b-green-400">
+          Related Products
+        </h2>
+      ) : null}
 
       <div className="relative overflow-hidden">
         <div

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProductCard } from "../ProductCard";
 import { useGetProducts } from "./useGetProducts";
 import SuperSaleBanner from "@/assets/images/SuperSaleBanner.png";
@@ -9,19 +9,30 @@ import { Categories } from "./Categories";
 import { useGetCategories } from "./useGetCategories";
 import { Skeleton } from "../Skeleton";
 
+const sizes = ["Small", "Medium", "Large"];
+
 export default function ShopSection() {
-  const [activeTab, setActiveTab] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<string | null>(null);
   const [priceRange, setPriceRange] = useState([39, 630]);
   const [page, setPage] = useState<1 | 2>(1);
   const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [size, setSize] = useState<string>();
+  const [filterApplied, setFilterApplied] = useState(false);
 
   const { categories, isCategoryLoading } = useGetCategories();
-  const { products, isProductLoading } = useGetProducts(page);
+  const { products, isProductLoading } = useGetProducts({
+    page,
+    limit: 9,
+    category: selectedCategory,
+    size,
+    tag: activeTab,
+    min_price: filterApplied ? priceRange[0] : undefined,
+    max_price: filterApplied ? priceRange[1] : undefined,
+  });
 
-  const filteredProducts = () =>
-    selectedCategory
-      ? products.filter((item) => item.category_id === selectedCategory)
-      : products;
+  useEffect(() => {
+    setFilterApplied(false);
+  }, [products]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -92,7 +103,13 @@ export default function ShopSection() {
                   <span>${priceRange[1]}</span>
                 </div>
 
-                <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-colors">
+                <button
+                  className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-colors"
+                  onClick={() => {
+                    setFilterApplied(true);
+                    setPage(1);
+                  }}
+                >
                   Filter
                 </button>
               </div>
@@ -101,24 +118,15 @@ export default function ShopSection() {
             <div>
               <h2 className="text-xl font-semibold mb-4">Size</h2>
               <ul className="space-y-2">
-                <li className="flex items-center justify-between">
-                  <span className="flex items-center space-x-2 cursor-pointer">
-                    Small
-                  </span>
-                  <span className="text-sm text-gray-400">(119)</span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="flex items-center space-x-2 cursor-pointer">
-                    Medium
-                  </span>
-                  <span className="text-sm text-gray-400">(86)</span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="flex items-center space-x-2 cursor-pointer">
-                    Large
-                  </span>
-                  <span className="text-sm text-gray-400">(78)</span>
-                </li>
+                {sizes.map((size) => (
+                  <li
+                    key={size}
+                    className="flex items-center cursor-pointer"
+                    onClick={() => setSize(size)}
+                  >
+                    {size}
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -142,9 +150,9 @@ export default function ShopSection() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
             <div className="flex gap-6 border-b border-gray-200 w-full sm:w-auto">
               <button
-                onClick={() => setActiveTab("all")}
+                onClick={() => setActiveTab(null)}
                 className={`pb-2 px-1 ${
-                  activeTab === "all"
+                  activeTab === null
                     ? "text-green-600 border-b-2 border-green-600"
                     : "text-gray-600"
                 }`}
@@ -152,9 +160,9 @@ export default function ShopSection() {
                 All Plants
               </button>
               <button
-                onClick={() => setActiveTab("new")}
+                onClick={() => setActiveTab("new-arrivals")}
                 className={`pb-2 px-1 ${
-                  activeTab === "new"
+                  activeTab === "new-arrivals"
                     ? "text-green-600 border-b-2 border-green-600"
                     : "text-gray-600"
                 }`}
@@ -194,7 +202,7 @@ export default function ShopSection() {
                 <Skeleton className="w-auto h-80" />
               </>
             ) : (
-              filteredProducts().map((product) => (
+              products?.map((product) => (
                 <ProductCard product={product} key={product.product_id} />
               ))
             )}

@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { Category } from "./useGetCategories";
 
 interface Props {
-  categories: Category[];
+  categories?: Category[];
   selectedCategory?: string;
   setSelectedCategory: Dispatch<SetStateAction<string | undefined>>;
 }
@@ -16,20 +16,23 @@ export const Categories = ({
     <div>
       <h2 className="text-xl font-semibold mb-4">Categories</h2>
       <ul className="space-y-3">
-        {categories.map((category) => (
+        {categories?.map((category) => (
           <li
             key={category.category_id}
             onClick={() =>
               setSelectedCategory((prev) =>
-                prev === category.category_id ? undefined : category.category_id
+                prev === category.category_name
+                  ? undefined
+                  : category.category_name
               )
             }
             className={`flex items-center justify-between text-gray-600 hover:text-green-600 cursor-pointer ${
-              selectedCategory === category.category_id ? "text-green-600" : ""
+              selectedCategory === category.category_name
+                ? "text-green-600"
+                : ""
             }`}
           >
             <span>{category.category_name}</span>
-            <span className="text-sm text-gray-400">(10)</span>
           </li>
         ))}
       </ul>
