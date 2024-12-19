@@ -51,7 +51,7 @@ export const ProductCard = ({ product }: Props) => {
           <button
             onClick={() => triggerLike({ productId: product.product_id })}
             className={`p-3 rounded-full shadow-md hover:bg-green-600 hover:text-white transition-colors ${
-              product.liked ? "bg-green-600" : "bg-white"
+              product.liked ? "bg-red-600" : "bg-white"
             }`}
           >
             <svg
@@ -89,8 +89,8 @@ export const ProductCard = ({ product }: Props) => {
       <div className="mt-4 space-y-2">
         <h3 className="text-lg font-medium text-gray-900">{product_name}</h3>
         <div className="flex items-center gap-2">
-          {discount && <del className="text-gray-400">${discount}</del>}
-          <strong className="text-green-600">${cost.toFixed(2)}</strong>
+          {discount && <del className="text-gray-400">${cost.toFixed(2)}</del>}
+          <strong className="text-green-600">${discount.toFixed(2)}</strong>
         </div>
       </div>
     </div>

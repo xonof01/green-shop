@@ -193,7 +193,6 @@ const Header = () => {
               </span>
             )}
           </button>
-
           {isLoggedIn ? (
             <div className="relative hidden sm:block">
               <Button
@@ -238,7 +237,7 @@ const Header = () => {
               onClick={() => setModalOpen(true)}
               title="Login"
               leftIcon={<LoginIcon />}
-              extraStyle="py-2 px-4 hidden sm:block"
+              extraStyle="py-2 px-4 hidden sm:flex"
               type="button"
             />
           )}
