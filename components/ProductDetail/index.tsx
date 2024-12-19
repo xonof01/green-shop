@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "../ProductCard/type";
 import { useLikeProduct } from "@/hooks/useLikeProduct";
+import { useBasketProduct } from "@/hooks/useBasketProduct";
 
 export default function ProductDetail({ product }: { product: Product }) {
   const [selectedImage, setSelectedImage] = useState(product.image_url[0]);
@@ -12,7 +13,8 @@ export default function ProductDetail({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
 
-  const { mutate } = useLikeProduct();
+  const { triggerLike } = useLikeProduct();
+  const { triggerBasket } = useBasketProduct();
 
   const handleQuantityChange = (action: "increase" | "decrease") => {
     if (action === "increase" && product.count > quantity) {
@@ -196,13 +198,18 @@ export default function ProductDetail({ product }: { product: Product }) {
               <button className="px-8 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
                 BUY NOW
               </button>
-              <button className="px-8 py-3 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors">
+              <button
+                onClick={() => triggerBasket({ productId: product.product_id })}
+                className={`px-8 py-3 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors ${
+                  product.basket ? "bg-green-600" : "bg-white"
+                }`}
+              >
                 ADD TO CART
               </button>
               <button
-                onClick={() => mutate({ productId: product.product_id })}
-                className={`p-3 border border-green-600 rounded-md hover:bg-gray-50 transition-colors${
-                  product.basket ? "bg-green-600" : "bg-white"
+                onClick={() => triggerLike({ productId: product.product_id })}
+                className={`p-3 border border-green-600 rounded-md hover:bg-gray-50 transition-colors ${
+                  product.liked ? "bg-green-600" : "bg-white"
                 }`}
               >
                 <svg

@@ -29,6 +29,7 @@ const Header = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [registerEmail, setRegisterEmail] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [authState, setAuthState] = useState<
     "login" | "register" | "verifyRegister" | "forgotPassword" | "resetPassword"
   >("login");
@@ -136,7 +137,7 @@ const Header = () => {
         <Link href="/">
           <Logo />
         </Link>
-        <nav className="flex items-center gap-[50px]">
+        <nav className="hidden md:flex items-center gap-[50px]">
           {navbarItems.map(({ id, title, path: itemPath }) => (
             <Link
               key={id}
@@ -194,7 +195,7 @@ const Header = () => {
           </button>
 
           {isLoggedIn ? (
-            <div className="relative">
+            <div className="relative hidden sm:block">
               <Button
                 type="button"
                 leftIcon={
@@ -237,12 +238,52 @@ const Header = () => {
               onClick={() => setModalOpen(true)}
               title="Login"
               leftIcon={<LoginIcon />}
-              extraStyle="py-2 px-4"
+              extraStyle="py-2 px-4 hidden sm:block"
               type="button"
             />
           )}
         </div>
+
+        <button
+          className="md:hidden p-2"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
       </div>
+
+      {isMobileMenuOpen && (
+        <nav className="md:hidden bg-white border-t border-[#EEF7F0] py-4">
+          {navbarItems.map(({ id, title, path: itemPath }) => (
+            <Link
+              key={id}
+              href={itemPath}
+              className={`block py-2 px-4 text-[#3D3D3D] text-[16px] font-normal ${
+                itemPath === path
+                  ? "font-bold text-[#46A358]"
+                  : "hover:text-[#46A358] transition-colors"
+              }`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {title}
+            </Link>
+          ))}
+        </nav>
+      )}
+
       <Modal isOpen={isModalOpen} setIsOpen={setModalOpen} width={500}>
         <ul className="mb-[55px] flex items-center justify-center gap-[10px]">
           <li

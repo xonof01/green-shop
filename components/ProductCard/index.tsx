@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Product } from "./type";
 import HeroImg from "@/assets/images/HeroImg.jpg";
 import { useLikeProduct } from "@/hooks/useLikeProduct";
+import { useBasketProduct } from "@/hooks/useBasketProduct";
 
 interface Props {
   product: Product;
@@ -12,7 +13,8 @@ interface Props {
 export const ProductCard = ({ product }: Props) => {
   const { product_id, product_name, image_url, discount, cost } = product;
   const router = useRouter();
-  const { mutate } = useLikeProduct();
+  const { triggerLike } = useLikeProduct();
+  const { triggerBasket } = useBasketProduct();
 
   return (
     <div className="group relative cursor-pointer">
@@ -26,7 +28,12 @@ export const ProductCard = ({ product }: Props) => {
           onClick={() => router.push(`/shop/${product_id}`)}
         />
         <div className="absolute bottom-[-50%] left-1/2 transform -translate-x-1/2 flex gap-3 opacity-0 group-hover:opacity-100 group-hover:bottom-4 transition-all duration-300">
-          <button className="p-3 bg-white rounded-full shadow-md hover:bg-green-600 hover:text-white transition-colors">
+          <button
+            onClick={() => triggerBasket({ productId: product.product_id })}
+            className={`p-3 rounded-full shadow-md hover:bg-green-600 hover:text-white transition-colors ${
+              product.basket ? "bg-green-600" : "bg-white"
+            }`}
+          >
             <svg
               className="w-5 h-5"
               fill="none"
@@ -42,9 +49,9 @@ export const ProductCard = ({ product }: Props) => {
             </svg>
           </button>
           <button
-            onClick={() => mutate({ productId: product.product_id })}
+            onClick={() => triggerLike({ productId: product.product_id })}
             className={`p-3 rounded-full shadow-md hover:bg-green-600 hover:text-white transition-colors ${
-              product.basket ? "bg-green-600" : "bg-white"
+              product.liked ? "bg-green-600" : "bg-white"
             }`}
           >
             <svg

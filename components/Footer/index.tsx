@@ -7,11 +7,14 @@ import { footerLinks, serviceText } from "./StaticData";
 export default function Footer() {
   return (
     <footer className="bg-white">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex gap-6">
-          <div className="grid md:grid-cols-3 gap-8 mb-16 w-2/3">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full lg:w-2/3">
             {serviceText.map((service, index) => (
-              <div key={index} className="px-4 border-r border-green-100">
+              <div
+                key={index}
+                className="px-4 border-r border-green-100 last:border-r-0"
+              >
                 <div className="mx-auto rounded-full flex items-center justify-start mb-4">
                   {service.svg}
                 </div>
@@ -21,11 +24,11 @@ export default function Footer() {
             ))}
           </div>
 
-          <div className="text-center mb-16 w-1/3">
+          <div className="text-center lg:text-left w-full lg:w-1/3">
             <h3 className="text-2xl font-bold mb-4">
               Would you like to join newsletters?
             </h3>
-            <form className="flex max-w-md mx-auto">
+            <form className="flex max-w-md mx-auto lg:mx-0">
               <input
                 type="email"
                 placeholder="enter your email address..."
@@ -47,12 +50,12 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="bg-green-50 p-6 border-t border-b border-green-100 grid grid-cols-1 md:grid-cols-4 gap-6 items-center mb-16">
+        <div className="bg-green-50 p-6 border-t border-b border-green-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-center my-8">
           <Logo />
           <div className="flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-green-600"
+              className="h-5 w-5 text-green-600 flex-shrink-0"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -62,12 +65,14 @@ export default function Footer() {
                 clipRule="evenodd"
               />
             </svg>
-            <span>70 West Buckingham Ave. Farmingdale, NY 11735</span>
+            <span className="text-sm">
+              70 West Buckingham Ave. Farmingdale, NY 11735
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-green-600"
+              className="h-5 w-5 text-green-600 flex-shrink-0"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -76,7 +81,7 @@ export default function Footer() {
             </svg>
             <a
               href="mailto:contact@greenshop.com"
-              className="hover:text-green-600"
+              className="hover:text-green-600 text-sm"
             >
               contact@greenshop.com
             </a>
@@ -84,19 +89,22 @@ export default function Footer() {
           <div className="flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-green-600"
+              className="h-5 w-5 text-green-600 flex-shrink-0"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
               <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
             </svg>
-            <a href="tel:+8801911717490" className="hover:text-green-600">
+            <a
+              href="tel:+8801911717490"
+              className="hover:text-green-600 text-sm"
+            >
               +88 01911 717 490
             </a>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
             <h4 className="font-bold text-lg mb-4">My Account</h4>
             <ul className="space-y-2">
@@ -144,7 +152,7 @@ export default function Footer() {
           </div>
           <div>
             <h4 className="font-bold text-lg mb-4">Social Media</h4>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mb-8">
               <Link href="#" className="text-gray-400 hover:text-green-600">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -196,9 +204,15 @@ export default function Footer() {
                 </svg>
               </Link>
             </div>
-            <div className="mt-8">
+            <div>
               <h4 className="font-bold text-lg mb-4">We Accept</h4>
-              <Image src={Sponsors} alt="Sponsors" width={224} height={26} />
+              <Image
+                src={Sponsors}
+                alt="Sponsors"
+                width={224}
+                height={26}
+                className="max-w-full h-auto"
+              />
             </div>
           </div>
         </div>
